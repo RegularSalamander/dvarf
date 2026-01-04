@@ -7,6 +7,22 @@ function love.load()
     love.window.setTitle("Dvarf")
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
+
+    --checkerboard setup
+    checker = love.graphics.newCanvas()
+    love.graphics.setCanvas(checker)
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.rectangle("fill", 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
+    love.graphics.setColor(1, 1, 1, 1)
+    for x = 0, CAMERA_WIDTH do
+        for y = 0, CAMERA_HEIGHT do
+            if (x+y)%2 == 0 then
+                love.graphics.rectangle("fill", x, y, 1, 1)
+            end
+        end
+    end
+
+    love.graphics.setCanvas()
 end
 
 function love.update()
@@ -15,8 +31,9 @@ end
 
 function love.draw()
     love.graphics.setCanvas(gameCanvas)
-    love.graphics.setColor(1, 0, 0, 1)
-    love.graphics.line(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(checker)
 
     local w, h = love.graphics.getDimensions()
     local scl = math.min(w/CAMERA_WIDTH, h/CAMERA_HEIGHT)
