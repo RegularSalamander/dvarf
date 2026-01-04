@@ -5,7 +5,7 @@ require("lighting")
 local mouseX = 0
 local mouseY = 0
 
-circlePos = {}
+lightPos = {}
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -33,7 +33,7 @@ function love.draw()
     love.graphics.setColor(34/255, 32/255, 52/255, 1)
     love.graphics.rectangle("fill", 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
 
-    circlePos = {
+    lightPos = {
         {0, 0},
         {mouseX, mouseY}
     }

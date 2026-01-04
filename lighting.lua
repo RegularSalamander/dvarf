@@ -34,14 +34,14 @@ function checkerStencil()
 end
 
 function smallCircleStencil()
-    for i = 1, #circlePos do
-        love.graphics.circle("fill", circlePos[i][1], circlePos[i][2], TILE_SIZE*3)
+    for i = 1, #lightPos do
+        love.graphics.circle("fill", lightPos[i][1], lightPos[i][2], TILE_SIZE*3)
     end
 end
 
 function largeCircleStencil()
-    for i = 1, #circlePos do
-        love.graphics.circle("fill", circlePos[i][1], circlePos[i][2], TILE_SIZE*5)
+    for i = 1, #lightPos do
+        love.graphics.circle("fill", lightPos[i][1], lightPos[i][2], TILE_SIZE*5)
     end
 end
 
