@@ -30,10 +30,6 @@ function generateLights()
 end
 
 function applyLightingStencils()
-    if checkerMask == nil then
-        createCheckerMask()
-    end
-
     love.graphics.stencil(maskStencil, "increment", 1, true)
     love.graphics.setStencilTest("greater", 0)
 end
