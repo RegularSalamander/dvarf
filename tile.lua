@@ -10,11 +10,10 @@ function tile:damage(amt)
 end
 
 function tile:draw()
+    love.graphics.setColor(1, 1, 1, 1)
     if self.hp > 0 then
-        love.graphics.setColor(102/255, 57/255, 49/255)
+        love.graphics.draw(images.wall, self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE)
     else
-        love.graphics.setColor(69/255, 40/255, 60/255)
+        love.graphics.draw(images.floor, self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE)
     end
-
-    love.graphics.rectangle("fill", self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
 end
