@@ -1,6 +1,7 @@
 require("class")
 require("variables")
 
+require("blobMap")
 require("tile")
 require("map")
 require("lighting")
@@ -31,6 +32,11 @@ function love.update()
     mouseX, mouseY = love.mouse.getPosition()
     mouseX = mouseX / scl
     mouseY = mouseY / scl
+
+    local xpos = math.floor(mouseX / TILE_SIZE)
+    local ypos = math.floor(mouseY / TILE_SIZE)
+
+    damageTile(xpos, ypos)
 end
 
 function love.draw()
@@ -59,12 +65,5 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
-    --damage tile when clicked for debugging
-    local w, h = love.graphics.getDimensions()
-    local scl = math.min(w/CAMERA_WIDTH, h/CAMERA_HEIGHT)
-
-    local xpos = math.floor(x / scl / TILE_SIZE)
-    local ypos = math.floor(y / scl / TILE_SIZE)
-
-    damageTile(xpos, ypos)
+    
 end
