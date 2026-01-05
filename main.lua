@@ -1,11 +1,12 @@
+require("class")
 require("variables")
 
+require("tile")
+require("map")
 require("lighting")
 
 local mouseX = 0
 local mouseY = 0
-
-lightPos = {}
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -14,6 +15,8 @@ function love.load()
     love.window.setTitle("Dvarf")
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
+
+    generateMap()
 end
 
 function love.update()
@@ -33,15 +36,11 @@ function love.draw()
     love.graphics.setColor(34/255, 32/255, 52/255, 1)
     love.graphics.rectangle("fill", 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
 
-    lightPos = {
-        {0, 0},
-        {mouseX, mouseY}
-    }
-
+    generateLights()
     applyLightingStencils()
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.rectangle("fill", 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
+    drawMap()
 
     --draw gameCanvas to screen
     love.graphics.setCanvas()
@@ -54,3 +53,13 @@ function love.draw()
     love.graphics.draw(gameCanvas, 0, 0, 0, scl, scl)
 end
 
+function love.mousepressed(x, y, button, istouch, presses)
+    --damage tile when clicked for debugging
+    local w, h = love.graphics.getDimensions()
+    local scl = math.min(w/CAMERA_WIDTH, h/CAMERA_HEIGHT)
+
+    local xpos = math.floor(x / scl / TILE_SIZE)
+    local ypos = math.floor(y / scl / TILE_SIZE)
+
+    damageTile(xpos, ypos)
+end

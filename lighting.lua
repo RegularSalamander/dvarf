@@ -8,6 +8,9 @@ local mask_shader = love.graphics.newShader[[
    }
 ]]
 
+local lightPos = {}
+local checkerMask
+
 function createCheckerMask()
     checkerMask = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
@@ -35,13 +38,24 @@ end
 
 function smallCircleStencil()
     for i = 1, #lightPos do
-        love.graphics.circle("fill", lightPos[i][1], lightPos[i][2], TILE_SIZE*3)
+        love.graphics.circle("fill", lightPos[i][1], lightPos[i][2], SMALL_LIGHT_SIZE)
     end
 end
 
 function largeCircleStencil()
     for i = 1, #lightPos do
-        love.graphics.circle("fill", lightPos[i][1], lightPos[i][2], TILE_SIZE*5)
+        love.graphics.circle("fill", lightPos[i][1], lightPos[i][2], LARGE_LIGHT_SIZE)
+    end
+end
+
+function generateLights()
+    lightPos = {}
+    for x = 1, MAP_WIDTH do
+        for y = 1, MAP_HEIGHT do
+            if getTile(x, y).hp <= 0 then
+                table.insert(lightPos, {x*TILE_SIZE + TILE_SIZE/2, y*TILE_SIZE + TILE_SIZE/2})
+            end
+        end
     end
 end
 
