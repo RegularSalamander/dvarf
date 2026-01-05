@@ -14,6 +14,9 @@ function love.load()
     love.window.setMode(CAMERA_WIDTH * DEFAULT_PIXEL_SCALE, CAMERA_HEIGHT * DEFAULT_PIXEL_SCALE, {vsync = false, msaa = 0, highdpi = true})
     love.window.setTitle("Dvarf")
 
+    images = {}
+    images.lightmask = love.graphics.newImage("assets/lightmask.png")
+
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
     generateMap()
