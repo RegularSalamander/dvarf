@@ -24,7 +24,7 @@ function generateLights()
 
     lightPos = {}
     for x = startX - LIGHT_MARGIN, startX + 40 + LIGHT_MARGIN do
-        for y = startY - LIGHT_MARGIN, startY + 22 + LIGHT_MARGIN + 1 do
+        for y = startY - LIGHT_MARGIN, startY + 23 + LIGHT_MARGIN do
             if getTile(x, y) and getTile(x, y).hp <= 0 then
                 table.insert(lightPos, {(x - 4) * TILE_SIZE, (y - 4) * TILE_SIZE})
             end

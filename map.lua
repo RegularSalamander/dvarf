@@ -71,7 +71,7 @@ function drawMap()
     local startY = math.floor(cameraY/TILE_SIZE)
 
     for x = startX, startX + 40 do
-        for y = startY, startY + 22 do
+        for y = startY, startY + 23 do
             if getTile(x, y) then
                 tiles[x][y]:draw()
             end
