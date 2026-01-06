@@ -23,7 +23,7 @@ function player:control()
             action = true
         end
         if controls.left > 0 then
-            self.dir = 0
+            self.dir = -1
             self.nextPos = {x = self.pos.x - 1, y = self.pos.y}
             action = true
         end
@@ -75,40 +75,46 @@ function player:draw()
     love.graphics.setColor(1, 1, 1, 1)
 
     if self.state == PSTATE.moving then
-        local x = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x)
-        local y = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y)
+        local drawx = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x)
+        local drawy = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y)
 
         love.graphics.draw(
             images.player,
             love.graphics.newQuad(
-                PLAYER_WIDTH, self.dir * PLAYER_HEIGHT,
+                PLAYER_WIDTH, 0,
                 PLAYER_WIDTH, PLAYER_HEIGHT,
-                PLAYER_WIDTH * PLAYER_COLS, PLAYER_HEIGHT * PLAYER_ROWS
+                PLAYER_WIDTH * 2, PLAYER_HEIGHT
             ),
-            x * TILE_SIZE,
-            y * TILE_SIZE
+            drawx * TILE_SIZE + PLAYER_WIDTH/2, drawy * TILE_SIZE, --x, y
+            0, --r
+            self.dir, 1, --sx, sy
+            PLAYER_WIDTH/2, 0 --ox, oy
         )
     elseif self.state == PSTATE.mining then
         love.graphics.draw(
             images.player,
             love.graphics.newQuad(
-                PLAYER_WIDTH, self.dir * PLAYER_HEIGHT,
+                PLAYER_WIDTH, 0,
                 PLAYER_WIDTH, PLAYER_HEIGHT,
-                PLAYER_WIDTH * PLAYER_COLS, PLAYER_HEIGHT * PLAYER_ROWS
+                PLAYER_WIDTH * 2, PLAYER_HEIGHT
             ),
-            self.pos.x * TILE_SIZE,
-            self.pos.y * TILE_SIZE
+            self.pos.x * TILE_SIZE + PLAYER_WIDTH/2, self.pos.y * TILE_SIZE, --x, y
+            0, --r
+            self.dir, 1, --sx, sy
+            PLAYER_WIDTH/2, 0 --ox, oy
         )
     elseif self.state == PSTATE.idle or self.state == PSTATE.cooldown then
         love.graphics.draw(
             images.player,
             love.graphics.newQuad(
-                0, self.dir * PLAYER_HEIGHT,
+                0, 0,
                 PLAYER_WIDTH, PLAYER_HEIGHT,
-                PLAYER_WIDTH * PLAYER_COLS, PLAYER_HEIGHT * PLAYER_ROWS
+                PLAYER_WIDTH * 2, PLAYER_HEIGHT
             ),
-            self.pos.x * TILE_SIZE,
-            self.pos.y * TILE_SIZE
+            self.pos.x * TILE_SIZE + PLAYER_WIDTH/2, self.pos.y * TILE_SIZE, --x, y
+            0, --r
+            self.dir, 1, --sx, sy
+            PLAYER_WIDTH/2, 0 --ox, oy
         )
     end
 end
