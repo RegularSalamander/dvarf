@@ -74,47 +74,29 @@ end
 function player:draw()
     love.graphics.setColor(1, 1, 1, 1)
 
-    if self.state == PSTATE.moving then
-        local drawx = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x)
-        local drawy = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y)
+    local drawx = self.pos.x
+    local drawy = self.pos.y
 
-        love.graphics.draw(
-            images.player,
-            love.graphics.newQuad(
-                PLAYER_WIDTH, 0,
-                PLAYER_WIDTH, PLAYER_HEIGHT,
-                PLAYER_WIDTH * 2, PLAYER_HEIGHT
-            ),
-            drawx * TILE_SIZE + PLAYER_WIDTH/2, drawy * TILE_SIZE, --x, y
-            0, --r
-            self.dir, 1, --sx, sy
-            PLAYER_WIDTH/2, 0 --ox, oy
-        )
+    local jumping = 0
+
+    if self.state == PSTATE.moving then
+        drawx = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x)
+        drawy = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y)
+        jumping = 1
     elseif self.state == PSTATE.mining then
-        love.graphics.draw(
-            images.player,
-            love.graphics.newQuad(
-                PLAYER_WIDTH, 0,
-                PLAYER_WIDTH, PLAYER_HEIGHT,
-                PLAYER_WIDTH * 2, PLAYER_HEIGHT
-            ),
-            self.pos.x * TILE_SIZE + PLAYER_WIDTH/2, self.pos.y * TILE_SIZE, --x, y
-            0, --r
-            self.dir, 1, --sx, sy
-            PLAYER_WIDTH/2, 0 --ox, oy
-        )
-    elseif self.state == PSTATE.idle or self.state == PSTATE.cooldown then
-        love.graphics.draw(
-            images.player,
-            love.graphics.newQuad(
-                0, 0,
-                PLAYER_WIDTH, PLAYER_HEIGHT,
-                PLAYER_WIDTH * 2, PLAYER_HEIGHT
-            ),
-            self.pos.x * TILE_SIZE + PLAYER_WIDTH/2, self.pos.y * TILE_SIZE, --x, y
-            0, --r
-            self.dir, 1, --sx, sy
-            PLAYER_WIDTH/2, 0 --ox, oy
-        )
+        jumping = 1
     end
+
+    love.graphics.draw(
+        images.player,
+        love.graphics.newQuad(
+            jumping * PLAYER_WIDTH, 0,
+            PLAYER_WIDTH, PLAYER_HEIGHT,
+            PLAYER_WIDTH * 2, PLAYER_HEIGHT
+        ),
+        drawx * TILE_SIZE + PLAYER_WIDTH/2, drawy * TILE_SIZE, --x, y
+        0, --r
+        self.dir, 1, --sx, sy
+        PLAYER_WIDTH/2, 0 --ox, oy
+    )
 end
