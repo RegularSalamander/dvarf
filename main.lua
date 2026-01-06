@@ -30,6 +30,7 @@ function love.load()
     images.lightmask = love.graphics.newImage("assets/lightmask.png")
     images.wall = love.graphics.newImage("assets/wall.png")
     images.floor = love.graphics.newImage("assets/floor.png")
+    images.player = love.graphics.newImage("assets/player.png")
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
