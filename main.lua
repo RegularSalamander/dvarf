@@ -6,8 +6,16 @@ require("tile")
 require("map")
 require("lighting")
 
-local mouseX = 0
-local mouseY = 0
+require("game")
+
+local gameState = ""
+
+function setGameState(newState)
+    gameState = newState
+    if _G[gameState .. "_load"] then
+        _G[gameState .. "_load"]()
+    end
+end
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -22,36 +30,19 @@ function love.load()
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
-    generateMap()
+    setGameState("game")
 end
 
 function love.update()
-    local w, h = love.graphics.getDimensions()
-    local scl = math.min(w/CAMERA_WIDTH, h/CAMERA_HEIGHT)
-
-    mouseX, mouseY = love.mouse.getPosition()
-    mouseX = mouseX / scl
-    mouseY = mouseY / scl
-
-    local xpos = math.floor(mouseX / TILE_SIZE)
-    local ypos = math.floor(mouseY / TILE_SIZE)
-
-    damageTile(xpos, ypos)
+    if _G[gameState .. "_update"] then
+        _G[gameState .. "_update"]()
+    end
 end
 
 function love.draw()
-    --draw to gameCanvas
-    love.graphics.setCanvas{gameCanvas, stencil=true}
-
-    love.graphics.setStencilTest()
-    love.graphics.setColor(34/255, 32/255, 52/255, 1)
-    love.graphics.rectangle("fill", 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
-
-    generateLights()
-    applyLightingStencils()
-
-    love.graphics.setColor(1, 1, 1, 1)
-    drawMap()
+    if _G[gameState .. "_draw"] then
+        _G[gameState .. "_draw"]()
+    end
 
     --draw gameCanvas to screen
     love.graphics.setCanvas()
@@ -64,6 +55,14 @@ function love.draw()
     love.graphics.draw(gameCanvas, 0, 0, 0, scl, scl)
 end
 
-function love.mousepressed(x, y, button, istouch, presses)
-    
+function love.keypressed(key, scancode, isrepeat)
+    if _G[gameState .. "_keypressed"] then
+        _G[gameState .. "_keypressed"]()
+    end
+end
+
+function love.keyreleased(key, scancode, isrepeat)
+    if _G[gameState .. "_keyreleased"] then
+        _G[gameState .. "_keyreleased"]()
+    end
 end
