@@ -57,12 +57,12 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
     if _G[gameState .. "_keypressed"] then
-        _G[gameState .. "_keypressed"]()
+        _G[gameState .. "_keypressed"](key, scancode, isrepeat)
     end
 end
 
 function love.keyreleased(key, scancode, isrepeat)
     if _G[gameState .. "_keyreleased"] then
-        _G[gameState .. "_keyreleased"]()
+        _G[gameState .. "_keyreleased"](key, scancode, isrepeat)
     end
 end
