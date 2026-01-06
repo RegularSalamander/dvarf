@@ -8,7 +8,7 @@ function generateMap()
         end
     end
 
-    tiles[10][10].hp = 0
+    tiles[math.floor(MAP_WIDTH/2)][math.floor(MAP_HEIGHT/2)].hp = 0
 
     for x = 1, MAP_WIDTH do
         for y = 1, MAP_HEIGHT do
