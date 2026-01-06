@@ -12,36 +12,31 @@ end
 
 function player:control()
     if self.state == PSTATE.idle then
+        local action = false
+
         if controls.up > 0 then
             self.nextPos = {x = self.pos.x, y = self.pos.y - 1}
-            if isWall(self.pos.x, self.pos.y - 1) then
-                self.state = PSTATE.mining
-            else
-                self.state = PSTATE.moving
-            end
+            action = true
         end
         if controls.down > 0 then
             self.nextPos = {x = self.pos.x, y = self.pos.y + 1}
-            if isWall(self.pos.x, self.pos.y + 1) then
-                self.state = PSTATE.mining
-            else
-                self.state = PSTATE.moving
-            end
+            action = true
         end
         if controls.left > 0 then
             self.dir = 0
             self.nextPos = {x = self.pos.x - 1, y = self.pos.y}
-            if isWall(self.pos.x - 1, self.pos.y) then
-                self.state = PSTATE.mining
-            else
-                self.state = PSTATE.moving
-            end
+            action = true
         end
         if controls.right > 0 then
             self.dir = 1
             self.nextPos = {x = self.pos.x + 1, y = self.pos.y}
-            if isWall(self.pos.x + 1, self.pos.y) then
+            action = true
+        end
+
+        if action then
+            if isWall(self.nextPos.x, self.nextPos.y) then
                 self.state = PSTATE.mining
+                blinkTile(self.nextPos.x, self.nextPos.y)
             else
                 self.state = PSTATE.moving
             end
@@ -62,7 +57,7 @@ function player:update()
     elseif self.state == PSTATE.mining then
         self.frame = self.frame + 1
         if self.frame >= PLAYER_MINE_FRAMES then
-            damageTile(self.nextPos.x, self.nextPos.y)
+            damageTile(self.nextPos.x, self.nextPos.y, 1)
             
             self.frame = 0
             self.state = PSTATE.cooldown

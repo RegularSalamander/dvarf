@@ -47,11 +47,19 @@ function updateAround(x, y)
     end
 end
 
-function damageTile(x, y)
+function blinkTile(x, y)
     local t = getTile(x, y)
 
     if t then
-        t:damage(1)
+        t:blink()
+    end
+end
+
+function damageTile(x, y, amt)
+    local t = getTile(x, y)
+
+    if t then
+        t:damage(amt)
         if t.hp <= 0 then
             updateAround(x, y)
         end

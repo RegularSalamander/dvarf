@@ -25,18 +25,6 @@ function game_load()
 end
 
 function game_update()
-    local w, h = love.graphics.getDimensions()
-    local scl = math.min(w/CAMERA_WIDTH, h/CAMERA_HEIGHT)
-
-    mouseX, mouseY = love.mouse.getPosition()
-    mouseX = mouseX / scl
-    mouseY = mouseY / scl
-
-    local xpos = math.floor(mouseX / TILE_SIZE)
-    local ypos = math.floor(mouseY / TILE_SIZE)
-
-    damageTile(xpos, ypos)
-
     objects.player:control()
     objects.player:update()
 

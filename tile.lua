@@ -2,12 +2,22 @@ tile = class:new()
 
 function tile:init(x, y)
     self.pos = {x=x, y=y}
-    self.hp = 1
+    
+    self.hp = 3
+    self.maxhp = self.hp
+
+    self.blinking = false
+    
     self.neighborIdx = 0
+end
+
+function tile:blink()
+    self.blinking = true
 end
 
 function tile:damage(amt)
     self.hp = self.hp - amt
+    self.blinking = false
 end
 
 function tile:updateSprite()
@@ -40,6 +50,10 @@ function tile:draw()
     if self.hp > 0 then
         local quadpos = {x=blobMap[self.neighborIdx].x, y=blobMap[self.neighborIdx].y}
 
+        if not self.blinking then
+            quadpos.y = quadpos.y + 7
+        end
+
         love.graphics.draw(images.wall, self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE)
         love.graphics.draw(
             images.wall,
@@ -47,7 +61,7 @@ function tile:draw()
                 quadpos.x * TILE_SIZE,
                 quadpos.y * TILE_SIZE,
                 TILE_SIZE, TILE_SIZE,
-                TILE_SIZE * 7, TILE_SIZE * 7
+                TILE_SIZE * 7, TILE_SIZE * 7 * 2
             ),
             self.pos.x * TILE_SIZE,
             self.pos.y * TILE_SIZE
