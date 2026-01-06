@@ -51,7 +51,7 @@ function player:update()
             self.pos.x = self.nextPos.x
             self.pos.y = self.nextPos.y
             
-            self.frame = 0
+            self.frame = PLAYER_COOLDOWN_FRAMES - PLAYER_MOVECOOL_FRAMES
             self.state = PSTATE.cooldown
         end
     elseif self.state == PSTATE.mining then
