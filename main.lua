@@ -1,11 +1,14 @@
 require("class")
-require("variables")
+require("util")
 
+require("variables")
 require("blobMap")
+
 require("tile")
 require("map")
 require("lighting")
 
+require("player")
 require("game")
 
 local gameState = ""

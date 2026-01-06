@@ -13,9 +13,13 @@ LARGE_LIGHT_SIZE = 4.5 * TILE_SIZE
 
 PLAYER_WIDTH = 8
 PLAYER_HEIGHT = 8
-PLAYER_MOVE_FRAMES = 30
+PLAYER_MOVE_FRAMES = 10
+PLAYER_MINE_FRAMES = 10
+PLAYER_COOLDOWN_FRAMES = 3
+
 PSTATE = {
     idle = 1,
     moving = 2,
-    mining = 3
+    mining = 3,
+    cooldown = 4
 }

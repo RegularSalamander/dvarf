@@ -19,6 +19,9 @@ function game_load()
     }
 
     generateMap()
+
+    objects = {}
+    objects.player = player:new(10, 10)
 end
 
 function game_update()
@@ -34,6 +37,8 @@ function game_update()
 
     damageTile(xpos, ypos)
 
+    objects.player:control()
+    objects.player:update()
 
     for k, v in pairs(controls) do
         if v > 0 then
@@ -70,7 +75,8 @@ function game_draw()
     drawMap()
 
     love.graphics.setStencilTest()
-    love.graphics.print(controls.up, 10, 10)
+    love.graphics.print(love.timer.getFPS(), 10, 10)
+    objects.player:draw()
 
     love.graphics.setCanvas()
 end
