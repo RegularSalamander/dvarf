@@ -19,10 +19,13 @@ function maskStencil()
 end
 
 function generateLights()
+    local startX = math.floor(cameraX/TILE_SIZE)
+    local startY = math.floor(cameraY/TILE_SIZE)
+
     lightPos = {}
-    for x = 1, MAP_WIDTH do
-        for y = 1, MAP_HEIGHT do
-            if getTile(x, y).hp <= 0 then
+    for x = startX - LIGHT_MARGIN, startX + 40 + LIGHT_MARGIN do
+        for y = startY - LIGHT_MARGIN, startY + 22 + LIGHT_MARGIN + 1 do
+            if getTile(x, y) and getTile(x, y).hp <= 0 then
                 table.insert(lightPos, {(x - 4) * TILE_SIZE, (y - 4) * TILE_SIZE})
             end
         end
@@ -30,6 +33,6 @@ function generateLights()
 end
 
 function applyLightingStencils()
-    love.graphics.stencil(maskStencil, "increment", 1, true)
+    love.graphics.stencil(maskStencil, "replace", 1, false)
     love.graphics.setStencilTest("greater", 0)
 end

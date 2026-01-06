@@ -1,3 +1,7 @@
 function map(x, a, b, c, d)
     return (x-a)/(b-a)*(d-c)+c
 end
+
+function constrain(x, a, b)
+    return math.max(math.min(x, b), a)
+end

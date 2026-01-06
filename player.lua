@@ -3,6 +3,7 @@ player = class:new()
 function player:init(x, y)
     self.pos = {x=x, y=y}
     self.nextPos = {x=x, y=y}
+    self.drawPos = {x=x, y=y}
     self.frame = 0
 
     self.dir = 1
@@ -45,7 +46,13 @@ function player:control()
 end
 
 function player:update()
+    self.drawPos.x = self.pos.x * TILE_SIZE
+    self.drawPos.y = self.pos.y * TILE_SIZE
+
     if self.state == PSTATE.moving then
+        self.drawPos.x = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x) * TILE_SIZE
+        self.drawPos.y = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y) * TILE_SIZE
+
         self.frame = self.frame + 1
         if self.frame >= PLAYER_MOVE_FRAMES then
             self.pos.x = self.nextPos.x
@@ -74,16 +81,9 @@ end
 function player:draw()
     love.graphics.setColor(1, 1, 1, 1)
 
-    local drawx = self.pos.x
-    local drawy = self.pos.y
-
     local jumping = 0
 
-    if self.state == PSTATE.moving then
-        drawx = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x)
-        drawy = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y)
-        jumping = 1
-    elseif self.state == PSTATE.mining then
+    if self.state == PSTATE.moving or self.state == PSTATE.mining then
         jumping = 1
     end
 
@@ -94,7 +94,7 @@ function player:draw()
             PLAYER_WIDTH, PLAYER_HEIGHT,
             PLAYER_WIDTH * 2, PLAYER_HEIGHT
         ),
-        drawx * TILE_SIZE + PLAYER_WIDTH/2, drawy * TILE_SIZE, --x, y
+        self.drawPos.x + PLAYER_WIDTH/2, self.drawPos.y, --x, y
         0, --r
         self.dir, 1, --sx, sy
         PLAYER_WIDTH/2, 0 --ox, oy

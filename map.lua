@@ -67,8 +67,11 @@ function damageTile(x, y, amt)
 end
 
 function drawMap()
-    for x = 1, MAP_WIDTH do
-        for y = 1, MAP_HEIGHT do
+    local startX = math.floor(cameraX/TILE_SIZE)
+    local startY = math.floor(cameraY/TILE_SIZE)
+
+    for x = startX, startX + 40 do
+        for y = startY, startY + 22 do
             if getTile(x, y) then
                 tiles[x][y]:draw()
             end

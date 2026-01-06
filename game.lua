@@ -1,6 +1,3 @@
-local mouseX = 0
-local mouseY = 0
-
 function game_load()
     --[[
         For controls:
@@ -20,6 +17,9 @@ function game_load()
 
     generateMap()
 
+    cameraX = 0
+    cameraY = 0
+
     objects = {}
     objects.player = player:new(10, 10)
 end
@@ -27,6 +27,12 @@ end
 function game_update()
     objects.player:control()
     objects.player:update()
+
+    cameraX = objects.player.drawPos.x + PLAYER_WIDTH/2 - CAMERA_WIDTH/2
+    cameraY = objects.player.drawPos.y + PLAYER_HEIGHT/2 - CAMERA_HEIGHT/2
+
+    cameraX = constrain(cameraX, TILE_SIZE, TILE_SIZE + MAP_WIDTH*TILE_SIZE - CAMERA_WIDTH)
+    cameraY = constrain(cameraY, TILE_SIZE, TILE_SIZE + MAP_HEIGHT*TILE_SIZE - CAMERA_HEIGHT)
 
     for k, v in pairs(controls) do
         if v > 0 then
@@ -56,6 +62,9 @@ function game_draw()
     love.graphics.setColor(34/255, 32/255, 52/255, 1)
     love.graphics.rectangle("fill", 0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
 
+    love.graphics.push()
+    love.graphics.translate(-cameraX, -cameraY)
+
     generateLights()
     applyLightingStencils()
 
@@ -63,8 +72,11 @@ function game_draw()
     drawMap()
 
     love.graphics.setStencilTest()
-    love.graphics.print(love.timer.getFPS(), 10, 10)
     objects.player:draw()
+
+    love.graphics.pop()
+
+    love.graphics.print(love.timer.getFPS(), 10, 10)
 
     love.graphics.setCanvas()
 end
