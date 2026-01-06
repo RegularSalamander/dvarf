@@ -60,6 +60,10 @@ function love.draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)
+    if scancode == "f11" and not isrepeat then
+        love.window.setFullscreen(not love.window.getFullscreen())
+    end
+
     if _G[gameState .. "_keypressed"] then
         _G[gameState .. "_keypressed"](key, scancode, isrepeat)
     end
