@@ -54,7 +54,6 @@ function tile:draw()
             quadpos.y = quadpos.y + 7
         end
 
-        love.graphics.draw(images.wall, self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE)
         love.graphics.draw(
             images.wall,
             love.graphics.newQuad(
