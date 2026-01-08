@@ -1,24 +1,34 @@
 local tiles = {}
 
 function generateMap()
+    --create tiles
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
-            local ore, gem = -1, -1
-            if math.random() < 0.01 then
-                if math.random() < 0.5 then
-                    ore = randint(0, ORE_SPRITE_COLS - 1)
-                else
-                    gem = randint(0, GEM_SPRITE_COLS - 1)
-                end
-            end
-
-            tiles[x][y] = tile:new(x, y, 5, ore, gem)
+            tiles[x][y] = tile:new(x, y, 5, -1, -1)
         end
     end
 
-    tiles[math.floor(MAP_WIDTH/2)][math.floor(MAP_HEIGHT/2)].hp = 0
+    --add space under mountain
+    for x = 1, MAP_WIDTH do
+        for y = MAP_BOTTOM_SPACE - 20, MAP_HEIGHT do
+            local bottomHeight = math.floor(
+                love.math.noise(x * MAP_BOTTOM_FREQ) * 2*MAP_BOTTOM_AMP + MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP +
+                -1 * math.pow(MAP_BOTTOM_CURVE * (x - MAP_WIDTH/2), 2)
+            )
+            if y > bottomHeight - 1 then
+                tiles[x][y].hp = 0
+            end
+            if y == bottomHeight then
+                tiles[x][y].hp = 3
+            end
+        end
+    end
 
+    updateAllTiles()
+end
+
+function updateAllTiles()
     for x = 1, MAP_WIDTH do
         for y = 1, MAP_HEIGHT do
             local t = getTile(x, y)

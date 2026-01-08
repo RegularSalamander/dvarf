@@ -10,6 +10,7 @@ require("lighting")
 
 require("player")
 require("game")
+require("mapView")
 
 local gameState = ""
 
@@ -37,6 +38,7 @@ function love.load()
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
     setGameState("game")
+    setGameState("mapView")
 end
 
 function love.update()
