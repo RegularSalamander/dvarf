@@ -1,19 +1,18 @@
 local tiles = {}
 
 function generateMap()
-    --create tiles
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
             --create tile
             tiles[x][y] = tile:new(x, y)
 
-            --create stone bands
+            --stone bands
             tiles[x][y].stonetype = constrain(5 - math.floor((y + math.random()*MAP_BAND_SCATTER*2 - MAP_BAND_SCATTER) / MAP_BAND_SIZE), 1, 5)
             tiles[x][y].maxhp = 5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
             tiles[x][y].hp = tiles[x][y].maxhp
 
-            --add space under mountain
+            --space under mountain
             local bottomHeight = math.floor(
                 love.math.noise(x * MAP_BOTTOM_FREQ) * 2*MAP_BOTTOM_AMP + MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP +
                 -1 * math.pow(MAP_BOTTOM_CURVE * (x - MAP_WIDTH/2), 2)
@@ -24,13 +23,16 @@ function generateMap()
             if y == bottomHeight then
                 tiles[x][y].hp = math.floor(tiles[x][y].maxhp/2)
             end
+
+            if math.random() < MAP_GEM_CHANCE then
+                tiles[x][y].gem = randint(0, GEM_SPRITE_COLS - 1)
+            elseif math.random() < MAP_ORE_CHANCE then
+                tiles[x][y].ore = randint(0, ORE_SPRITE_COLS - 1)
+            end
         end
     end
 
-    updateAllTiles()
-end
-
-function updateAllTiles()
+    --update tile sprites
     for x = 1, MAP_WIDTH do
         for y = 1, MAP_HEIGHT do
             local t = getTile(x, y)
