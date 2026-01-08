@@ -4,7 +4,7 @@ function generateMap()
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
-            tiles[x][y] = tile:new(x, y)
+            tiles[x][y] = tile:new(x, y, 5)
         end
     end
 

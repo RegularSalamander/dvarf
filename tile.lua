@@ -1,10 +1,10 @@
 tile = class:new()
 
-function tile:init(x, y)
+function tile:init(x, y, hp)
     self.pos = {x=x, y=y}
     
-    self.hp = 3
-    self.maxhp = self.hp
+    self.hp = hp
+    self.maxhp = hp
 
     self.blinking = false
     
@@ -54,13 +54,15 @@ function tile:draw()
             quadpos.y = quadpos.y + 7
         end
 
+        quadpos.x = quadpos.x + 7 * math.floor((self.maxhp - self.hp) / self.maxhp * 5)
+
         love.graphics.draw(
             images.wall,
             love.graphics.newQuad(
                 quadpos.x * TILE_SIZE,
                 quadpos.y * TILE_SIZE,
                 TILE_SIZE, TILE_SIZE,
-                TILE_SIZE * 7, TILE_SIZE * 7 * 2
+                TILE_SIZE * 7 * 5, TILE_SIZE * 7 * 2
             ),
             self.pos.x * TILE_SIZE,
             self.pos.y * TILE_SIZE
