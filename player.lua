@@ -11,6 +11,7 @@ function player:init(x, y)
     self.frame = 0
     
     self.damage = 1
+    self.holdLimit = 3
 
     self.trailing = nil
 end
@@ -70,16 +71,28 @@ function player:update()
             self.state = STATE.cooldown
             self.frame = PLAYER_COOLDOWN_FRAMES - PLAYER_MOVECOOL_FRAMES
 
+            --pick up items
             local it = itemAt(self.pos.x, self.pos.y)
             if it then
                 if self.trailing then
-                    local t = self.trailing
-                    self.trailing = it
-                    it.trailing = t
-                    it.held = true
+                    if self.trailing.num < self.holdLimit then
+                        local t = self.trailing
+                        self.trailing = it
+                        it.trailing = t
+                        it.held = true
+                        it.num = t.num + 1
+                    else
+                        local t = self.trailing
+                        t:dropEnd()
+                        self.trailing = it
+                        it.trailing = t
+                        it.held = true
+                        it.num = t.num + 1
+                    end
                 else
                     self.trailing = it
                     it.held = true
+                    it.num = 1
                 end
             end
         end

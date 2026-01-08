@@ -12,6 +12,7 @@ function item:init(x, y, opts)
 
     self.trailing = nil
     self.held = false
+    self.num = 0
 
     for i, v in pairs(opts) do
         self[i] = v
@@ -39,6 +40,19 @@ function item:move(x, y, maxFrames)
 
     self.nextPos.x = x
     self.nextPos.y = y
+end
+
+function item:dropEnd()
+    self.num = self.num - 1
+    if self.trailing == nil then
+        self.held = false
+        return true
+    end
+
+    if self.trailing:dropEnd() then
+        self.trailing = nil
+    end
+    return false
 end
 
 function item:update()
