@@ -1,19 +1,20 @@
 tile = class:new()
 
-function tile:init(x, y)
+function tile:init(x, y, opts)
+    opts = opts or {}
+
     self.pos = {x=x, y=y}
     
     self.hp = 1
     self.maxhp = 1
 
     self.stonetype = 1
-
-    self.ore = -1
-    self.gem = -1
-
     self.blinking = false
-    
     self.neighborIdx = 0
+
+    for i, v in pairs(opts) do
+        self[i] = v
+    end
 end
 
 function tile:blink()
@@ -70,7 +71,7 @@ function tile:draw()
             self.pos.y * TILE_SIZE
         )
 
-        if self.ore >= 0 then
+        if self.ore then
             love.graphics.draw(
                 images.ore,
                 love.graphics.newQuad(
@@ -82,7 +83,7 @@ function tile:draw()
                 self.pos.x * TILE_SIZE,
                 self.pos.y * TILE_SIZE
             )
-        elseif self.gem >= 0 then
+        elseif self.gem then
             love.graphics.draw(
                 images.gem,
                 love.graphics.newQuad(
