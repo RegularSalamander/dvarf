@@ -62,6 +62,15 @@ function generateMap()
         end
     end
 
+    for x = 1, MAP_WIDTH do
+        for y = 1, MAP_HEIGHT do
+            if tiles[x][y].hp < tiles[x][y].maxhp then
+                tiles[x][y].ore = nil
+                tiles[x][y].gem = nil
+            end
+        end
+    end
+
     --update tile sprites
     for x = 1, MAP_WIDTH do
         for y = 1, MAP_HEIGHT do
