@@ -1,10 +1,13 @@
 tile = class:new()
 
-function tile:init(x, y, hp)
+function tile:init(x, y, hp, ore, gem)
     self.pos = {x=x, y=y}
     
     self.hp = hp
     self.maxhp = hp
+
+    self.ore = ore or -1
+    self.gem = gem or -1
 
     self.blinking = false
     
@@ -62,11 +65,37 @@ function tile:draw()
                 quadpos.x * TILE_SIZE,
                 quadpos.y * TILE_SIZE,
                 TILE_SIZE, TILE_SIZE,
-                TILE_SIZE * 7 * 5, TILE_SIZE * 7 * 2
+                TILE_SIZE * WALL_SPRITE_COLS, TILE_SIZE * WALL_SPRITE_ROWS
             ),
             self.pos.x * TILE_SIZE,
             self.pos.y * TILE_SIZE
         )
+
+        if self.ore >= 0 then
+            love.graphics.draw(
+                images.ore,
+                love.graphics.newQuad(
+                    self.ore * TILE_SIZE,
+                    0,
+                    TILE_SIZE, TILE_SIZE,
+                    TILE_SIZE * ORE_SPRITE_COLS, TILE_SIZE
+                ),
+                self.pos.x * TILE_SIZE,
+                self.pos.y * TILE_SIZE
+            )
+        elseif self.gem >= 0 then
+            love.graphics.draw(
+                images.gem,
+                love.graphics.newQuad(
+                    self.gem * TILE_SIZE,
+                    0,
+                    TILE_SIZE, TILE_SIZE,
+                    TILE_SIZE * GEM_SPRITE_COLS, TILE_SIZE
+                ),
+                self.pos.x * TILE_SIZE,
+                self.pos.y * TILE_SIZE
+            )
+        end
     else
         love.graphics.draw(images.floor, self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE)
     end

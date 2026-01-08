@@ -4,7 +4,16 @@ function generateMap()
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
-            tiles[x][y] = tile:new(x, y, 5)
+            local ore, gem = -1, -1
+            if math.random() < 0.01 then
+                if math.random() < 0.5 then
+                    ore = randint(0, ORE_SPRITE_COLS - 1)
+                else
+                    gem = randint(0, GEM_SPRITE_COLS - 1)
+                end
+            end
+
+            tiles[x][y] = tile:new(x, y, 5, ore, gem)
         end
     end
 

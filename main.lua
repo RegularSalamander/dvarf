@@ -31,6 +31,8 @@ function love.load()
     images.wall = love.graphics.newImage("assets/wall.png")
     images.floor = love.graphics.newImage("assets/floor.png")
     images.player = love.graphics.newImage("assets/player.png")
+    images.ore = love.graphics.newImage("assets/ore.png")
+    images.gem = love.graphics.newImage("assets/gem.png")
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
