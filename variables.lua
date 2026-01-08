@@ -28,7 +28,7 @@ PLAYER_MINE_FRAMES = 12
 PLAYER_COOLDOWN_FRAMES = 10
 PLAYER_MOVECOOL_FRAMES = 3
 
-PSTATE = {
+STATE = {
     idle = 1,
     moving = 2,
     mining = 3,

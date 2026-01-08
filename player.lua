@@ -1,20 +1,22 @@
 player = class:new()
 
 function player:init(x, y)
-    self.pos = {x=x, y=y}
-    self.nextPos = {x=x, y=y}
-    self.drawPos = {x=x, y=y}
+    self.pos = {x = x, y = y}
+    self.nextPos = {x = x, y = y}
+    self.drawPos = {x = x * TILE_SIZE, y = y * TILE_SIZE}
 
     self.dir = 1
 
-    self.state = PSTATE.idle
+    self.state = STATE.idle
     self.frame = 0
     
     self.damage = 1
+
+    self.trailing = nil
 end
 
 function player:control()
-    if self.state == PSTATE.idle then
+    if self.state == STATE.idle then
         local action = false
 
         if controls.up > 0 then
@@ -38,10 +40,14 @@ function player:control()
 
         if action then
             if isWall(self.nextPos.x, self.nextPos.y) then
-                self.state = PSTATE.mining
+                self.state = STATE.mining
                 blinkTile(self.nextPos.x, self.nextPos.y)
             else
-                self.state = PSTATE.moving
+                self.state = STATE.moving
+
+                if self.trailing then
+                    self.trailing:move(self.pos.x, self.pos.y)
+                end
             end
         end
     end
@@ -51,31 +57,45 @@ function player:update()
     self.drawPos.x = self.pos.x * TILE_SIZE
     self.drawPos.y = self.pos.y * TILE_SIZE
 
-    if self.state == PSTATE.moving then
-        self.drawPos.x = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x) * TILE_SIZE
-        self.drawPos.y = map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y) * TILE_SIZE
-
+    if self.state == STATE.moving then
         self.frame = self.frame + 1
+
+        self.drawPos.x = math.floor(map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.x, self.nextPos.x) * TILE_SIZE)
+        self.drawPos.y = math.floor(map(self.frame, 0, PLAYER_MOVE_FRAMES, self.pos.y, self.nextPos.y) * TILE_SIZE)
+
         if self.frame >= PLAYER_MOVE_FRAMES then
             self.pos.x = self.nextPos.x
             self.pos.y = self.nextPos.y
             
+            self.state = STATE.cooldown
             self.frame = PLAYER_COOLDOWN_FRAMES - PLAYER_MOVECOOL_FRAMES
-            self.state = PSTATE.cooldown
+
+            local it = itemAt(self.pos.x, self.pos.y)
+            if it then
+                if self.trailing then
+                    local t = self.trailing
+                    self.trailing = it
+                    it.trailing = t
+                    it.held = true
+                else
+                    self.trailing = it
+                    it.held = true
+                end
+            end
         end
-    elseif self.state == PSTATE.mining then
+    elseif self.state == STATE.mining then
         self.frame = self.frame + 1
         if self.frame >= PLAYER_MINE_FRAMES then
             damageTile(self.nextPos.x, self.nextPos.y, self.damage)
             
+            self.state = STATE.cooldown
             self.frame = 0
-            self.state = PSTATE.cooldown
         end
-    elseif self.state == PSTATE.cooldown then
+    elseif self.state == STATE.cooldown then
         self.frame = self.frame + 1
         if self.frame >= PLAYER_COOLDOWN_FRAMES then
+            self.state = STATE.idle
             self.frame = 0
-            self.state = PSTATE.idle
         end
     end
 end
@@ -85,7 +105,7 @@ function player:draw()
 
     local jumping = 0
 
-    if self.state == PSTATE.moving or self.state == PSTATE.mining then
+    if self.state == STATE.moving or self.state == STATE.mining then
         jumping = 1
     end
 

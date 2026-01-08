@@ -85,6 +85,11 @@ function damageTile(x, y, amt)
         t:damage(amt)
         if t.hp <= 0 then
             updateAround(x, y)
+            if t.ore then
+                table.insert(objects.items, item:new(x, y, {ore = t.ore}))
+            elseif t.gem then
+                table.insert(objects.items, item:new(x, y, {gem = t.gem}))
+            end
         end
     end
 end

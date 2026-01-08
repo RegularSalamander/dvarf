@@ -21,6 +21,7 @@ function game_load()
     cameraY = 0
 
     objects = {}
+    objects.items = {item:new(math.floor(MAP_WIDTH/2) - 2, MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3, {ore = 2})}
     objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3)
 end
 
@@ -33,6 +34,10 @@ function game_update()
 
     cameraX = constrain(cameraX, TILE_SIZE, TILE_SIZE + MAP_WIDTH*TILE_SIZE - CAMERA_WIDTH)
     cameraY = constrain(cameraY, TILE_SIZE, TILE_SIZE + MAP_HEIGHT*TILE_SIZE - CAMERA_HEIGHT)
+
+    for i = 1, #objects.items do
+        objects.items[i]:update()
+    end
 
     for k, v in pairs(controls) do
         if v > 0 then
@@ -74,6 +79,10 @@ function game_draw()
 
     love.graphics.setColor(1, 1, 1, 1)
     drawMap()
+
+    for i = 1, #objects.items do
+        objects.items[i]:draw()
+    end
 
     love.graphics.setStencilTest()
     objects.player:draw()
