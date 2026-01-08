@@ -5,17 +5,15 @@ function generateMap()
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
+            --create tile
             tiles[x][y] = tile:new(x, y)
-            tiles[x][y].stonetype = math.floor(love.math.noise(x*0.01, y*0.01) * 5) + 1
-            if math.random() < 0.05 then
-                tiles[x][y].ore = randint(0, (tiles[x][y].stonetype-1)*2+1)
-            end
-        end
-    end
 
-    --add space under mountain
-    for x = 1, MAP_WIDTH do
-        for y = MAP_BOTTOM_SPACE - 20, MAP_HEIGHT do
+            --create stone bands
+            tiles[x][y].stonetype = constrain(5 - math.floor((y + math.random()*MAP_BAND_SCATTER*2 - MAP_BAND_SCATTER) / MAP_BAND_SIZE), 1, 5)
+            tiles[x][y].maxhp = 5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
+            tiles[x][y].hp = tiles[x][y].maxhp
+
+            --add space under mountain
             local bottomHeight = math.floor(
                 love.math.noise(x * MAP_BOTTOM_FREQ) * 2*MAP_BOTTOM_AMP + MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP +
                 -1 * math.pow(MAP_BOTTOM_CURVE * (x - MAP_WIDTH/2), 2)

@@ -4,11 +4,13 @@ function player:init(x, y)
     self.pos = {x=x, y=y}
     self.nextPos = {x=x, y=y}
     self.drawPos = {x=x, y=y}
-    self.frame = 0
 
     self.dir = 1
 
     self.state = PSTATE.idle
+    self.frame = 0
+    
+    self.damage = 1
 end
 
 function player:control()
@@ -64,7 +66,7 @@ function player:update()
     elseif self.state == PSTATE.mining then
         self.frame = self.frame + 1
         if self.frame >= PLAYER_MINE_FRAMES then
-            damageTile(self.nextPos.x, self.nextPos.y, 1)
+            damageTile(self.nextPos.x, self.nextPos.y, self.damage)
             
             self.frame = 0
             self.state = PSTATE.cooldown

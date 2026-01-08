@@ -21,7 +21,7 @@ function game_load()
     cameraY = 0
 
     objects = {}
-    objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2)
+    objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3)
 end
 
 function game_update()
@@ -47,6 +47,10 @@ end
 function game_keypressed(key, scancode, isrepeat)
     if isrepeat then return end
     if controls[scancode] then controls[scancode] = 1 end
+
+    if scancode == "z" then
+        objects.player.damage = objects.player.damage * PLAYER_DAMAGE_MULTIPLIER
+    end
 end
 
 function game_keyreleased(key, scancode, isrepeat)
