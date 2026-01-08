@@ -6,7 +6,7 @@ function mapView_draw()
             local t = getTile(x, y)
             if t then
                 if t.hp > 0 then
-                    love.graphics.setColor(COLORS.stone1light)
+                    love.graphics.setColor(COLORS["stone" .. t.stonetype .. "light"])
                     if t.gem > -1 then
                         love.graphics.setColor(COLORS["gem" .. (t.gem + 1)])
                     elseif t.ore > -1 then

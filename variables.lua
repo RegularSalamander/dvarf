@@ -36,7 +36,15 @@ ORE_SPRITE_COLS = 10
 
 COLORS = {
     stone1light = {102, 57, 49},
-    stone2light = {69, 40, 60},
+    stone1dark = {69, 40, 60},
+    stone2light = {89, 86, 82},
+    stone2dark = {50, 60, 57},
+    stone3light = {48, 96, 130},
+    stone3dark = {63, 63, 116},
+    stone4light = {118, 66, 138},
+    stone4dark = {69, 40, 60},
+    stone5light = {138, 111, 48},
+    stone5dark = {82, 75, 36},
     dark = {34, 32/355, 52},
     gem1 = {215, 123, 186},
     gem2 = {91, 110, 225},
