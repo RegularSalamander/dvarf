@@ -5,7 +5,11 @@ function generateMap()
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
-            tiles[x][y] = tile:new(x, y, 5, -1, -1)
+            tiles[x][y] = tile:new(x, y)
+            tiles[x][y].stonetype = math.floor(love.math.noise(x*0.01, y*0.01) * 5) + 1
+            if math.random() < 0.05 then
+                tiles[x][y].ore = randint(0, (tiles[x][y].stonetype-1)*2+1)
+            end
         end
     end
 
@@ -20,7 +24,7 @@ function generateMap()
                 tiles[x][y].hp = 0
             end
             if y == bottomHeight then
-                tiles[x][y].hp = 3
+                tiles[x][y].hp = math.floor(tiles[x][y].maxhp/2)
             end
         end
     end

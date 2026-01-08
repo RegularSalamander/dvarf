@@ -1,13 +1,15 @@
 tile = class:new()
 
-function tile:init(x, y, hp, ore, gem)
+function tile:init(x, y)
     self.pos = {x=x, y=y}
     
-    self.hp = hp
-    self.maxhp = hp
+    self.hp = 1
+    self.maxhp = 1
 
-    self.ore = ore or -1
-    self.gem = gem or -1
+    self.stonetype = 1
+
+    self.ore = -1
+    self.gem = -1
 
     self.blinking = false
     
@@ -53,10 +55,7 @@ function tile:draw()
     if self.hp > 0 then
         local quadpos = {x=blobMap[self.neighborIdx].x, y=blobMap[self.neighborIdx].y}
 
-        if not self.blinking then
-            quadpos.y = quadpos.y + 7
-        end
-
+        quadpos.y = quadpos.y + 7 * self.stonetype
         quadpos.x = quadpos.x + 7 * math.floor((self.maxhp - self.hp) / self.maxhp * 5)
 
         love.graphics.draw(
@@ -91,6 +90,20 @@ function tile:draw()
                     0,
                     TILE_SIZE, TILE_SIZE,
                     TILE_SIZE * GEM_SPRITE_COLS, TILE_SIZE
+                ),
+                self.pos.x * TILE_SIZE,
+                self.pos.y * TILE_SIZE
+            )
+        end
+
+        if self.blinking then
+            love.graphics.draw(
+                images.wall,
+                love.graphics.newQuad(
+                    quadpos.x * TILE_SIZE,
+                    (quadpos.y % 7) * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE,
+                    TILE_SIZE * WALL_SPRITE_COLS, TILE_SIZE * WALL_SPRITE_ROWS
                 ),
                 self.pos.x * TILE_SIZE,
                 self.pos.y * TILE_SIZE

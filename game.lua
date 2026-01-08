@@ -21,7 +21,7 @@ function game_load()
     cameraY = 0
 
     objects = {}
-    objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_HEIGHT - 10)
+    objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2)
 end
 
 function game_update()
