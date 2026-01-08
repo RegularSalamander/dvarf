@@ -9,7 +9,7 @@ function generateMap()
 
             --stone bands
             tiles[x][y].stonetype = constrain(5 - math.floor((y + math.random()*MAP_BAND_SCATTER*2 - MAP_BAND_SCATTER) / MAP_BAND_SIZE), 1, 5)
-            tiles[x][y].maxhp = 1 --5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
+            tiles[x][y].maxhp = 5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
             tiles[x][y].hp = tiles[x][y].maxhp
 
             --space under mountain
@@ -23,11 +23,31 @@ function generateMap()
             if y == bottomHeight then
                 tiles[x][y].hp = math.floor(tiles[x][y].maxhp/2)
             end
+        end
+    end
 
-            if math.random() < MAP_GEM_CHANCE then
-                tiles[x][y].gem = randint(0, GEM_SPRITE_COLS - 1)
-            elseif math.random() < MAP_ORE_CHANCE then
-                tiles[x][y].ore = randint(0, ORE_SPRITE_COLS - 1)
+    --populate with ores and gems
+    for band = 0, 4 do
+        -- normal ore (Copper, Titanium, Gold, Mythril, Abyssum)
+        for i = 1, MAP_STAND_ORE_PER_BAND do
+            local randx = randint(2, MAP_WIDTH - 1)
+            local randy = randint(band * MAP_BAND_SIZE, (band + 1) * MAP_BAND_SIZE) + 1
+            tiles[randx][randy].ore = 8 - 2*band
+        end
+        -- higher ore (Iron, Silver, Chromium, Arcanite, Celestium)
+        for i = 1, MAP_HIGH_ORE_PER_BAND do
+            local randx = randint(2, MAP_WIDTH - 1)
+            local randy = randint(band * MAP_BAND_SIZE, (band + 1) * MAP_BAND_SIZE) + 1
+            tiles[randx][randy].ore = 8 - 2*band + 1
+        end
+        -- low ores (lower than the current band's level, skewed toward lower ores)
+        if band < 4 then
+            for i = 1, MAP_LOW_ORE_PER_BAND do
+                local randx = randint(2, MAP_WIDTH - 1)
+                local randy = randint(band * MAP_BAND_SIZE, (band + 1) * MAP_BAND_SIZE) + 1
+                local maxOre = 8 - 2*band
+                local minOre = 2 - 0.5*band
+                tiles[randx][randy].ore = math.floor(math.pow(math.random(), MAP_LOW_ORE_SKEW) * (maxOre - minOre) + minOre)
             end
         end
     end
