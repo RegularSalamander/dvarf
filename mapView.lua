@@ -9,7 +9,7 @@ function mapView_draw()
                     love.graphics.setColor(COLORS["stone" .. t.stonetype .. "light"])
                     
                     if t.gem then
-                        love.graphics.setColor(COLORS["gem" .. (t.gem + 1)])
+                        love.graphics.setColor(COLORS["gem" .. ((t.gem % GEM_SPRITE_COLS) + 1)])
                     elseif t.ore then
                         love.graphics.setColor(COLORS["ore" .. (t.ore + 1)])
                     end

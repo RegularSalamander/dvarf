@@ -77,8 +77,7 @@ function item:draw()
         love.graphics.draw(
             images.ore,
             love.graphics.newQuad(
-                self.ore * TILE_SIZE,
-                0,
+                self.ore * TILE_SIZE, 0,
                 TILE_SIZE, TILE_SIZE,
                 TILE_SIZE * ORE_SPRITE_COLS, TILE_SIZE
             ),
@@ -89,8 +88,7 @@ function item:draw()
         love.graphics.draw(
             images.gem,
             love.graphics.newQuad(
-                self.gem * TILE_SIZE,
-                0,
+                (self.gem % GEM_SPRITE_COLS) * TILE_SIZE, 0,
                 TILE_SIZE, TILE_SIZE,
                 TILE_SIZE * GEM_SPRITE_COLS, TILE_SIZE
             ),
