@@ -43,9 +43,12 @@ function player:control()
             if isWall(self.nextPos.x, self.nextPos.y) then
                 self.state = STATE.mining
                 blinkTile(self.nextPos.x, self.nextPos.y)
+            elseif interactableAt(self.nextPos.x, self.nextPos.y) then
+                self.state = STATE.interacting
+                local i = interactableAt(self.nextPos.x, self.nextPos.y)
+                i:func()
             else
                 self.state = STATE.moving
-
                 if self.trailing then
                     self.trailing:move(self.pos.x, self.pos.y)
                 end
@@ -104,6 +107,12 @@ function player:update()
             self.state = STATE.cooldown
             self.frame = 0
         end
+    elseif self.state == STATE.interacting then
+        self.frame = self.frame + 1
+        if self.frame >= PLAYER_INTERACT_FRAMES then
+            self.state = STATE.cooldown
+            self.frame = 0
+        end
     elseif self.state == STATE.cooldown then
         self.frame = self.frame + 1
         if self.frame >= PLAYER_COOLDOWN_FRAMES then
@@ -118,7 +127,7 @@ function player:draw()
 
     local jumping = 0
 
-    if self.state == STATE.moving or self.state == STATE.mining then
+    if self.state == STATE.moving or self.state == STATE.mining or self.state == STATE.interacting then
         jumping = 1
     end
 

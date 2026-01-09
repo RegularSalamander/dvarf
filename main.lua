@@ -11,6 +11,8 @@ require("lighting")
 require("player")
 require("item")
 
+require("interactable")
+
 require("game")
 require("mapView")
 

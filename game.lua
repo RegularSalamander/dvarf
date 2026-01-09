@@ -21,8 +21,9 @@ function game_load()
     cameraY = 0
 
     objects = {}
-    objects.items = {item:new(math.floor(MAP_WIDTH/2) - 2, MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3, {ore = 2})}
     objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3)
+    objects.items = {}
+    objects.interactables = {interactable:new(30, 240, 3, 3)}
 end
 
 function game_update()
@@ -37,6 +38,12 @@ function game_update()
 
     for i = 1, #objects.items do
         objects.items[i]:update()
+    end
+
+    for i = 1, #objects.interactables do
+        if objects.interactables[i].update then
+            objects.interactables[i]:update()
+        end
     end
 
     for k, v in pairs(controls) do
@@ -82,6 +89,10 @@ function game_draw()
 
     for i = 1, #objects.items do
         objects.items[i]:draw()
+    end
+
+    for i = 1, #objects.interactables do
+        objects.interactables[i]:draw()
     end
 
     love.graphics.setStencilTest()

@@ -32,6 +32,7 @@ PLAYER_HEIGHT = 8
 
 PLAYER_MOVE_FRAMES = 12
 PLAYER_MINE_FRAMES = 12
+PLAYER_INTERACT_FRAMES = 12
 PLAYER_COOLDOWN_FRAMES = 10
 PLAYER_MOVECOOL_FRAMES = 3
 
@@ -39,7 +40,8 @@ STATE = {
     idle = 1,
     moving = 2,
     mining = 3,
-    cooldown = 4
+    interacting = 4,
+    cooldown = 5
 }
 
 STONE_LAYER_MULTIPLIER = 2
