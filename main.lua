@@ -40,6 +40,8 @@ function love.load()
     images.ore = love.graphics.newImage("assets/ore.png")
     images.gem = love.graphics.newImage("assets/gem.png")
     images.stockpile = love.graphics.newImage("assets/stockpile.png")
+    images.orepile = love.graphics.newImage("assets/orepile.png")
+    images.gempile = love.graphics.newImage("assets/gempile.png")
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
