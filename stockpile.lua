@@ -5,13 +5,9 @@ function stockpile:init()
     self.func = function()
         if objects.player.trailing then
             local t = objects.player.trailing
+            self:addItem(t)
             t.held = false
             t.alive = false
-            if t.ore then
-                table.insert(self.contents.ore, t.ore)
-            elseif t.gem then
-                table.insert(self.contents.gem, t.gem)
-            end
             if t.trailing then
                 t.trailing:move(t.pos.x, t.pos.y)
                 objects.player.trailing = t.trailing
@@ -25,6 +21,35 @@ function stockpile:init()
         ore = {},
         gem = {}
     }
+
+    for i = 1, STOCKPILE_STACKS do
+        self.contents.ore[i] = {}
+    end
+    for i = 1, STOCKPILE_STACKS do
+        self.contents.gem[i] = {}
+    end
+end
+
+function stockpile:addItem(it)
+    if it.ore then
+        local tests = 0
+        local i = 0
+        repeat
+            i = randint(1, STOCKPILE_STACKS)
+            tests = tests + 1
+        until #self.contents.ore[i] < 4 * STOCKPILE_STACK_HEIGHT or tests > STOCKPILE_RANDOM_TESTS
+
+        table.insert(self.contents.ore[i], it.ore)
+    elseif it.gem then
+        local tests = 0
+        local i = 0
+        repeat
+            i = randint(1, STOCKPILE_STACKS)
+            tests = tests + 1
+        until #self.contents.gem[i] < 4 * STOCKPILE_STACK_HEIGHT or tests > STOCKPILE_RANDOM_TESTS
+
+        table.insert(self.contents.gem[i], it.gem)
+    end
 end
 
 function stockpile:drawPart(xp, yp, xw, yw)
@@ -62,58 +87,52 @@ function stockpile:draw()
     end
 
     --piles of ore
-    local pilex = self.quad.x * TILE_SIZE + PILE_SIZE
-    local piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE
-    for i = 0, #self.contents.ore - 1 do
-        if i % 4 == 0 and i > 0 then
-            piley = piley - PILE_SIZE
+    for p = 1, STOCKPILE_STACKS do
+        local pilex = self.quad.x * TILE_SIZE + PILE_SIZE * p
+        local piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE
+        for i = 0, #self.contents.ore[p] - 1 do
+            if i % 4 == 0 and i > 0 then
+                piley = piley - PILE_SIZE
+            end
+            if i % (4*STOCKPILE_STACK_HEIGHT) == 0 and i > 0 then
+                piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE
+            end
+
+            love.graphics.draw(
+                images.orepile,
+                love.graphics.newQuad(
+                    (i % 4) * PILE_SIZE, self.contents.ore[p][i + 1] * PILE_SIZE,
+                    PILE_SIZE, PILE_SIZE,
+                    4 * PILE_SIZE, PILE_SIZE * ORE_SPRITE_COLS
+                ),
+                pilex,
+                piley
+            )
         end
-        if i % (4*STOCKPILE_ORE_HEIGHT) == 0 and i > 0 then
-            piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE
-            pilex = pilex + PILE_SIZE
-        end
-        if i % (4*STOCKPILE_ORE_HEIGHT*STOCKPILE_ORE_STACKS) == 0 and i > 0 then
-            pilex = self.quad.x * TILE_SIZE + PILE_SIZE
-            piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE
-        end
-        
-        love.graphics.draw(
-            images.orepile,
-            love.graphics.newQuad(
-                (i % 4) * PILE_SIZE, self.contents.ore[i + 1] * PILE_SIZE,
-                PILE_SIZE, PILE_SIZE,
-                4 * PILE_SIZE, PILE_SIZE * ORE_SPRITE_COLS
-            ),
-            pilex,
-            piley
-        )
     end
-    
+
     --piles of gems
-    local pilex = self.quad.x * TILE_SIZE + PILE_SIZE*2.5
-    local piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE - PILE_SIZE*5
-    for i = 0, #self.contents.gem - 1 do
-        if i % 4 == 0 and i > 0 then
-            piley = piley - PILE_SIZE
+    for p = 1, STOCKPILE_STACKS do
+        local pilex = self.quad.x * TILE_SIZE + PILE_SIZE * p
+        local piley = (self.quad.y + self.quad.h - 3.5) * TILE_SIZE
+        for i = 0, #self.contents.gem[p] - 1 do
+            if i % 4 == 0 and i > 0 then
+                piley = piley - PILE_SIZE
+            end
+            if i % (4*STOCKPILE_STACK_HEIGHT) == 0 and i > 0 then
+                piley = (self.quad.y + self.quad.h - 3.5) * TILE_SIZE
+            end
+
+            love.graphics.draw(
+                images.gempile,
+                love.graphics.newQuad(
+                    (i % 4) * PILE_SIZE, (self.contents.gem[p][i + 1] % GEM_SPRITE_COLS) * PILE_SIZE,
+                    PILE_SIZE, PILE_SIZE,
+                    4 * PILE_SIZE, PILE_SIZE * GEM_SPRITE_COLS
+                ),
+                pilex,
+                piley
+            )
         end
-        if i % (4*STOCKPILE_GEM_HEIGHT) == 0 and i > 0 then
-            piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE - PILE_SIZE*5
-            pilex = pilex + PILE_SIZE
-        end
-        if i % (4*STOCKPILE_GEM_HEIGHT*STOCKPILE_GEM_STACKS) == 0 and i > 0 then
-            pilex = self.quad.x * TILE_SIZE + PILE_SIZE*2.5
-            piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE - PILE_SIZE*5
-        end
-        
-        love.graphics.draw(
-            images.gempile,
-            love.graphics.newQuad(
-                (i % 4) * PILE_SIZE, self.contents.gem[i + 1] * PILE_SIZE,
-                PILE_SIZE, PILE_SIZE,
-                4 * PILE_SIZE, PILE_SIZE * GEM_SPRITE_COLS
-            ),
-            pilex,
-            piley
-        )
     end
 end
