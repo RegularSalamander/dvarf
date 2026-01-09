@@ -12,6 +12,7 @@ require("player")
 require("item")
 
 require("interactable")
+require("stockpile")
 
 require("game")
 require("mapView")
@@ -38,6 +39,7 @@ function love.load()
     images.player = love.graphics.newImage("assets/player.png")
     images.ore = love.graphics.newImage("assets/ore.png")
     images.gem = love.graphics.newImage("assets/gem.png")
+    images.stockpile = love.graphics.newImage("assets/stockpile.png")
 
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 

@@ -23,7 +23,7 @@ function game_load()
     objects = {}
     objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3)
     objects.items = {}
-    objects.interactables = {interactable:new(30, 240, 3, 3)}
+    objects.interactables = {stockpile:new()}
 end
 
 function game_update()
@@ -38,6 +38,11 @@ function game_update()
 
     for i = 1, #objects.items do
         objects.items[i]:update()
+    end
+    for i = #objects.items, 1, -1 do
+        if not objects.items[i].alive then
+            table.remove(objects.items, i)
+        end
     end
 
     for i = 1, #objects.interactables do
