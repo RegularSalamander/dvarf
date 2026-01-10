@@ -28,9 +28,22 @@ function stockpile:init()
     for i = 1, STOCKPILE_STACKS do
         self.contents.gem[i] = {}
     end
+
+    self.dropping = false
+    self.frame = 0
+    self.droppingOre = nil
+    self.droppingGem = nil
+    self.dropFrom = {x=0, y=0}
+    self.dropTo = {x=0, y=0}
 end
 
 function stockpile:addItem(it)
+    self.dropping = true
+    self.dropFrom = {
+        x = it.pos.x * TILE_SIZE,
+        y = it.pos.y * TILE_SIZE
+    }
+
     if it.ore then
         local tests = 0
         local i = 0
@@ -39,7 +52,13 @@ function stockpile:addItem(it)
             tests = tests + 1
         until #self.contents.ore[i] < 4 * STOCKPILE_STACK_HEIGHT or tests > STOCKPILE_RANDOM_TESTS
 
-        table.insert(self.contents.ore[i], it.ore)
+        table.insert(self.contents.ore[i], -it.ore - 1)
+
+        self.droppingOre = it.ore
+        self.dropTo = {
+            x = self.quad.x * TILE_SIZE + PILE_SIZE * i,
+            y = (self.quad.y + self.quad.h - 1) * TILE_SIZE
+        }
     elseif it.gem then
         local tests = 0
         local i = 0
@@ -48,7 +67,42 @@ function stockpile:addItem(it)
             tests = tests + 1
         until #self.contents.gem[i] < 4 * STOCKPILE_STACK_HEIGHT or tests > STOCKPILE_RANDOM_TESTS
 
-        table.insert(self.contents.gem[i], it.gem)
+        table.insert(self.contents.gem[i], -it.gem - 1)
+
+        self.droppingGem = it.gem
+        self.dropTo = {
+            x = self.quad.x * TILE_SIZE + PILE_SIZE * i,
+            y = (self.quad.y + self.quad.h - 3.5) * TILE_SIZE
+        }
+    end
+end
+
+function stockpile:update()
+    if self.dropping then
+        self.frame = self.frame + 1
+
+        if self.frame >= STOCKPILE_FRAMES then
+            self.dropping = false
+            self.frame = 0
+            self.droppingOre = nil
+            self.droppingGem = nil
+
+            --set all positive
+            for i = 1, #self.contents.ore do
+                for j = 1, #self.contents.ore[i] do
+                    if self.contents.ore[i][j] < 0 then
+                        self.contents.ore[i][j] = -self.contents.ore[i][j] - 1
+                    end
+                end
+            end
+            for i = 1, #self.contents.gem do
+                for j = 1, #self.contents.gem[i] do
+                    if self.contents.gem[i][j] < 0 then
+                        self.contents.gem[i][j] = -self.contents.gem[i][j] - 1
+                    end
+                end
+            end
+        end
     end
 end
 
@@ -98,16 +152,18 @@ function stockpile:draw()
                 piley = (self.quad.y + self.quad.h - 1) * TILE_SIZE
             end
 
-            love.graphics.draw(
-                images.orepile,
-                love.graphics.newQuad(
-                    (i % 4) * PILE_SIZE, self.contents.ore[p][i + 1] * PILE_SIZE,
-                    PILE_SIZE, PILE_SIZE,
-                    4 * PILE_SIZE, PILE_SIZE * ORE_SPRITE_COLS
-                ),
-                pilex,
-                piley
-            )
+            if self.contents.ore[p][i + 1] >= 0 then
+                love.graphics.draw(
+                    images.orepile,
+                    love.graphics.newQuad(
+                        (i % 4) * PILE_SIZE, self.contents.ore[p][i + 1] * PILE_SIZE,
+                        PILE_SIZE, PILE_SIZE,
+                        4 * PILE_SIZE, PILE_SIZE * ORE_SPRITE_COLS
+                    ),
+                    pilex,
+                    piley
+                )
+            end
         end
     end
 
@@ -123,16 +179,54 @@ function stockpile:draw()
                 piley = (self.quad.y + self.quad.h - 3.5) * TILE_SIZE
             end
 
+            if self.contents.gem[p][i + 1] >= 0 then
+                love.graphics.draw(
+                    images.gempile,
+                    love.graphics.newQuad(
+                        (i % 4) * PILE_SIZE, (self.contents.gem[p][i + 1] % GEM_SPRITE_COLS) * PILE_SIZE,
+                        PILE_SIZE, PILE_SIZE,
+                        4 * PILE_SIZE, PILE_SIZE * GEM_SPRITE_COLS
+                    ),
+                    pilex,
+                    piley
+                )
+            end
+        end
+    end
+
+    --draw moving item
+    if self.dropping then
+        local drawx = map(self.frame, 0, STOCKPILE_FRAMES, self.dropFrom.x, self.dropTo.x) + TILE_SIZE/2
+        local drawy = map(self.frame, 0, STOCKPILE_FRAMES, self.dropFrom.y, self.dropTo.y) + TILE_SIZE/2
+        local drawScl = map(self.frame, 0, STOCKPILE_FRAMES, 1, STOCKPILE_ITEM_SCL)
+
+        if self.droppingOre then
             love.graphics.draw(
-                images.gempile,
+                images.ore,
                 love.graphics.newQuad(
-                    (i % 4) * PILE_SIZE, (self.contents.gem[p][i + 1] % GEM_SPRITE_COLS) * PILE_SIZE,
-                    PILE_SIZE, PILE_SIZE,
-                    4 * PILE_SIZE, PILE_SIZE * GEM_SPRITE_COLS
+                    self.droppingOre * TILE_SIZE, 0,
+                    TILE_SIZE, TILE_SIZE,
+                    TILE_SIZE * ORE_SPRITE_COLS, TILE_SIZE
                 ),
-                pilex,
-                piley
+                drawx, drawy,
+                0,
+                drawScl, drawScl,
+                TILE_SIZE/2, TILE_SIZE/2
+            )
+        elseif self.droppingGem then
+            love.graphics.draw(
+                images.gem,
+                love.graphics.newQuad(
+                    (self.droppingGem % GEM_SPRITE_COLS) * TILE_SIZE, 0,
+                    TILE_SIZE, TILE_SIZE,
+                    TILE_SIZE * GEM_SPRITE_COLS, TILE_SIZE
+                ),
+                drawx, drawy,
+                0,
+                drawScl, drawScl,
+                TILE_SIZE/2, TILE_SIZE/2
             )
         end
+        -- love.graphics.rectangle("fill", drawx, drawy, 10, 10)
     end
 end
