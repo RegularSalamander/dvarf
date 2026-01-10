@@ -1,6 +1,9 @@
 local tiles = {}
 
 function generateMap()
+    local randOffsetX = math.random() * 10 - 5
+    local randOffsetY = math.random() * 10 - 5
+
     for x = 1, MAP_WIDTH do
         tiles[x] = {}
         for y = 1, MAP_HEIGHT do
@@ -14,7 +17,7 @@ function generateMap()
 
             --space under mountain
             local bottomHeight = math.floor(
-                love.math.noise(x * MAP_BOTTOM_FREQ) * 2*MAP_BOTTOM_AMP + MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP +
+                love.math.noise(x * MAP_BOTTOM_FREQ + randOffsetX) * 2*MAP_BOTTOM_AMP + MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP +
                 -1 * math.pow(MAP_BOTTOM_CURVE * (x - MAP_WIDTH/2), 2)
             )
             if y > bottomHeight - 1 then

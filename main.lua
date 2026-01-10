@@ -27,6 +27,9 @@ function setGameState(newState)
 end
 
 function love.load()
+    math.randomseed(os.time())
+    love.math.setRandomSeed(os.time())
+
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
     love.window.setMode(CAMERA_WIDTH * DEFAULT_PIXEL_SCALE, CAMERA_HEIGHT * DEFAULT_PIXEL_SCALE, {vsync = true, msaa = 0, highdpi = true})
@@ -46,7 +49,7 @@ function love.load()
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
     setGameState("game")
-    -- setGameState("mapView")
+    setGameState("mapView")
 end
 
 function love.update()
