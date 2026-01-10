@@ -9,7 +9,7 @@ function generateMap()
 
             --stone bands
             tiles[x][y].stonetype = constrain(5 - math.floor((y + math.random()*MAP_BAND_SCATTER*2 - MAP_BAND_SCATTER) / MAP_BAND_SIZE), 1, 5)
-            tiles[x][y].maxhp = 1--5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
+            tiles[x][y].maxhp = 5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
             tiles[x][y].hp = tiles[x][y].maxhp
 
             --space under mountain
