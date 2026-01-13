@@ -26,6 +26,9 @@ function generateMap()
             if y == bottomHeight then
                 tiles[x][y].hp = math.floor(tiles[x][y].maxhp/2)
             end
+            if y > bottomHeight + 2 then
+                tiles[x][y].floor = false
+            end
         end
     end
 

@@ -5,10 +5,14 @@ function tile:init(x, y, opts)
 
     self.pos = {x=x, y=y}
     
+    self.stonetype = 1
+    self.ore = nil
+    self.gem = nil
+    self.floor = true
+
     self.hp = 1
     self.maxhp = 1
-
-    self.stonetype = 1
+    
     self.blinking = false
     self.neighborIdx = 0
 
@@ -108,7 +112,7 @@ function tile:draw()
                 self.pos.y * TILE_SIZE
             )
         end
-    else
+    elseif self.floor then
         love.graphics.draw(images.floor, self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE)
     end
 end
