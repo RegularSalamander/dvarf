@@ -77,6 +77,43 @@ STOCKPILE_ITEM_SCL = 0.5
 
 DISCOVER_FRAMES = 4
 
+ORE_NAMES = {
+    "Copper",
+    "Iron",
+    "Titanium",
+    "Silver",
+    "Gold",
+    "Chromium",
+    "Mythril",
+    "Arcanite",
+    "Abyssum",
+    "Celestium"
+}
+
+GEM_NAMES = {
+    "Alexandrite",
+    "Zircon",
+    "Peridot",
+    "Tourmaline",
+    "Carnelian",
+    "Garnet",
+    "Opal",
+    "Amethyst",
+    "Sapphire",
+    "Emerald",
+    "Citrine",
+    "Topaz",
+    "Ruby",
+    "Diamond",
+    "Moonshard",
+    "Tempestine",
+    "Verdantine",
+    "Sunspire",
+    "Emberstone",
+    "Radiantine",
+    "Aetherglass"
+}
+
 COLORS = {
     white = {255, 255, 255},
     black = {0, 0, 0},

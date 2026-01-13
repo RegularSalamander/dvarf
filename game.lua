@@ -27,6 +27,8 @@ function game_load()
     
     discoverAround(objects.player.pos.x, objects.player.pos.y)
     timeToDiscover = DISCOVER_FRAMES
+
+    countInventory()
 end
 
 function game_update()

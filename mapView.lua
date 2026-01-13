@@ -23,4 +23,17 @@ function mapView_draw()
             love.graphics.rectangle("fill", x, y, 1, 1)
         end
     end
+
+    --show map inventory
+    for i = 1, ORE_SPRITE_COLS do
+        love.graphics.setColor(COLORS["ore" .. i])
+        love.graphics.print(ORE_NAMES[i], MAP_WIDTH + 20, 20*i)
+        love.graphics.print(inventory.map.ore[i], MAP_WIDTH + 90, 20*i)
+    end
+
+    for i = 1, GEM_SPRITE_COLS * 3 do
+        love.graphics.setColor(COLORS["gem" .. ((i-1) % GEM_SPRITE_COLS + 1)])
+        love.graphics.print(GEM_NAMES[i], MAP_WIDTH + 160, 20*i)
+        love.graphics.print(inventory.map.gem[i], MAP_WIDTH + 240, 20*i)
+    end
 end
