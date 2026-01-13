@@ -9,6 +9,7 @@ function tile:init(x, y, opts)
     self.ore = nil
     self.gem = nil
     self.floor = true
+    self.rock = false
 
     self.hp = 1
     self.maxhp = 1
@@ -22,12 +23,16 @@ function tile:init(x, y, opts)
 end
 
 function tile:blink()
-    self.blinking = true
+    if not self.rock then
+        self.blinking = true
+    end
 end
 
 function tile:damage(amt)
-    self.hp = self.hp - amt
-    self.blinking = false
+    if not self.rock then
+        self.hp = self.hp - amt
+        self.blinking = false
+    end
 end
 
 function tile:updateSprite()
@@ -51,8 +56,6 @@ function tile:updateSprite()
         self.neighborIdx = self.neighborIdx * 2
         if neighbors[i] then self.neighborIdx = self.neighborIdx + 1 end
     end
-
-    -- self.neighborIdx = 1
 end
 
 function tile:draw()
@@ -93,6 +96,17 @@ function tile:draw()
                     (self.gem % GEM_SPRITE_COLS) * TILE_SIZE, 0,
                     TILE_SIZE, TILE_SIZE,
                     TILE_SIZE * GEM_SPRITE_COLS, TILE_SIZE
+                ),
+                self.pos.x * TILE_SIZE,
+                self.pos.y * TILE_SIZE
+            )
+        elseif self.rock then
+            love.graphics.draw(
+                images.rock,
+                love.graphics.newQuad(
+                    0, 0,
+                    TILE_SIZE, TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE
                 ),
                 self.pos.x * TILE_SIZE,
                 self.pos.y * TILE_SIZE

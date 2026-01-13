@@ -27,6 +27,9 @@ MAP_GEM_INCREASE = 1.2
 MAP_BEST_GEM = 7
 MAP_GEM_SKEW = 1.5
 
+MAP_ROCK_START = 100
+MAP_ROCK_INCREASE = 1.5
+
 PLAYER_WIDTH = 8
 PLAYER_HEIGHT = 8
 
@@ -62,6 +65,8 @@ STOCKPILE_FRAMES = PLAYER_INTERACT_FRAMES
 STOCKPILE_ITEM_SCL = 0.5
 
 COLORS = {
+    white = {255, 255, 255},
+    black = {0, 0, 0},
     stone1light = {102, 57, 49},
     stone1dark = {69, 40, 60},
     stone2light = {89, 86, 82},

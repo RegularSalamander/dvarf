@@ -32,7 +32,7 @@ function generateMap()
         end
     end
 
-    --populate with ores and gems
+    --populate with ores, gems, and rocks
     for band = 0, 4 do
         -- normal ore (Copper, Titanium, Gold, Mythril, Abyssum)
         for i = 1, MAP_STAND_ORE_PER_BAND do
@@ -66,13 +66,25 @@ function generateMap()
                 tiles[randx][randy].gem = math.floor(math.pow(math.random(), MAP_GEM_SKEW) * maxGem)
             end
         end
+
+        local rocksInBand = MAP_ROCK_START * math.pow(MAP_ROCK_INCREASE, 4 - band)
+        for i = 1, rocksInBand do
+            local randx = randint(2, MAP_WIDTH - 1)
+            local randy = randint(band * MAP_BAND_SIZE, (band + 1) * MAP_BAND_SIZE) + 1
+            local maxGem = math.floor(map(band, 4, 0, MAP_BEST_GEM, GEM_SPRITE_COLS * 3))
+            if tiles[randx][randy].ore == nil and tiles[randx][randy].gem == nil then
+                tiles[randx][randy].rock = true
+            end
+        end
     end
 
+    --remove everything from predamaged tiles (like the bottom row)
     for x = 1, MAP_WIDTH do
         for y = 1, MAP_HEIGHT do
             if tiles[x][y].hp < tiles[x][y].maxhp then
                 tiles[x][y].ore = nil
                 tiles[x][y].gem = nil
+                tiles[x][y].rock = false
             end
         end
     end

@@ -8,7 +8,9 @@ function mapView_draw()
                 if t.hp > 0 then
                     love.graphics.setColor(COLORS["stone" .. t.stonetype .. "light"])
                     
-                    if t.gem then
+                    if t.rock then
+                        love.graphics.setColor(COLORS.black)
+                    elseif t.gem then
                         love.graphics.setColor(COLORS["gem" .. ((t.gem % GEM_SPRITE_COLS) + 1)])
                     elseif t.ore then
                         love.graphics.setColor(COLORS["ore" .. (t.ore + 1)])
