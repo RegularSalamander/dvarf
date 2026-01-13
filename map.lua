@@ -78,6 +78,26 @@ function generateMap()
         end
     end
 
+    for x = 1, MAP_WIDTH do
+        for y = 1, MAP_HEIGHT do
+            if love.math.noise(x * MAP_POCKET_FREQ + randOffsetX, y * MAP_POCKET_FREQ + randOffsetY) > MAP_POCKET_THRESH then
+                tiles[x][y].hp = 0
+                tiles[x][y].ore = nil
+                tiles[x][y].gem = nil
+                tiles[x][y].rock = false
+            elseif tiles[x][y].hp > 0 and love.math.noise(x * MAP_DENSE_FREQ + randOffsetX, y * MAP_DENSE_FREQ + randOffsetY) > MAP_DENSE_THRESH then
+                tiles[x][y].stonetype = math.min(tiles[x][y].stonetype + 1, 5)
+                tiles[x][y].hp = 5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
+                tiles[x][y].maxhp = tiles[x][y].hp
+                if tiles[x][y].ore then
+                    tiles[x][y].ore = math.min(tiles[x][y].ore + 1, ORE_SPRITE_COLS-1)
+                elseif tiles[x][y].gem then
+                    tiles[x][y].gem = math.min(tiles[x][y].gem + 1, GEM_SPRITE_COLS-1)
+                end
+            end
+        end
+    end
+
     --remove everything from predamaged tiles (like the bottom row)
     for x = 1, MAP_WIDTH do
         for y = 1, MAP_HEIGHT do
