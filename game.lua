@@ -25,6 +25,8 @@ function game_load()
 
     generateMap()
     discoverAround(objects.player.pos.x, objects.player.pos.y)
+
+    while discoverNext() do end
 end
 
 function game_update()
@@ -51,6 +53,8 @@ function game_update()
             objects.interactables[i]:update()
         end
     end
+
+    discoverNext()
 
     for k, v in pairs(controls) do
         if v > 0 then

@@ -1,5 +1,7 @@
 local tiles = {}
 
+local discoverQueue = {}
+
 function generateMap()
     local randOffsetX = math.random() * 10 - 5
     local randOffsetY = math.random() * 10 - 5
@@ -156,15 +158,33 @@ function blinkTile(x, y)
 end
 
 function discoverAround(x, y)
-    for i = x-1, x+1 do
-        for j = y-1, y+1 do
-            local t = getTile(i, j)
-            if t and t.hp <= 0 and not t.discovered then
-                t.discovered = true
-                discoverAround(t.pos.x, t.pos.y)
+    local t = getTile(x, y)
+    if t and t.hp <= 0 and not t.discovered then
+        t.discovered = true
+
+        for i = x-1, x+1 do
+            for j = y-1, y+1 do
+                if i ~= x or j ~= y then
+                    table.insert(discoverQueue, {i, j})
+                end
             end
         end
+
+        return true
     end
+    return false
+end
+
+function discoverNext()
+    if #discoverQueue > 0 then
+        local stop = false
+        repeat
+            stop = discoverAround(discoverQueue[1][1], discoverQueue[1][2])
+            table.remove(discoverQueue, 1)
+        until stop or #discoverQueue == 0
+        return true
+    end
+    return false
 end
 
 function damageTile(x, y, amt)
