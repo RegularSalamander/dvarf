@@ -15,8 +15,6 @@ function game_load()
         x = 0
     }
 
-    generateMap()
-
     cameraX = 0
     cameraY = 0
 
@@ -24,6 +22,9 @@ function game_load()
     objects.player = player:new(math.floor(MAP_WIDTH/2), MAP_BOTTOM_SPACE + MAP_BOTTOM_AMP*2 + 3)
     objects.items = {}
     objects.interactables = {stockpile:new()}
+
+    generateMap()
+    discoverAround(objects.player.pos.x, objects.player.pos.y)
 end
 
 function game_update()

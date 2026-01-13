@@ -50,7 +50,7 @@ function love.load()
     gameCanvas = love.graphics.newCanvas(CAMERA_WIDTH, CAMERA_HEIGHT)
 
     setGameState("game")
-    setGameState("mapView")
+    -- setGameState("mapView")
 end
 
 function love.update()

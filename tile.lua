@@ -13,6 +13,8 @@ function tile:init(x, y, opts)
 
     self.hp = 1
     self.maxhp = 1
+
+    self.discovered = false
     
     self.blinking = false
     self.neighborIdx = 0

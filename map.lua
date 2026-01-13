@@ -85,7 +85,7 @@ function generateMap()
                 tiles[x][y].ore = nil
                 tiles[x][y].gem = nil
                 tiles[x][y].rock = false
-            elseif tiles[x][y].hp > 0 and love.math.noise(x * MAP_DENSE_FREQ + randOffsetX, y * MAP_DENSE_FREQ + randOffsetY) > MAP_DENSE_THRESH then
+            elseif tiles[x][y].hp > 0 and love.math.noise(x * MAP_DENSE_FREQ - randOffsetX, y * MAP_DENSE_FREQ + randOffsetY) > MAP_DENSE_THRESH then
                 tiles[x][y].stonetype = math.min(tiles[x][y].stonetype + 1, 5)
                 tiles[x][y].hp = 5 * math.pow(STONE_LAYER_MULTIPLIER, tiles[x][y].stonetype - 1)
                 tiles[x][y].maxhp = tiles[x][y].hp
@@ -155,6 +155,18 @@ function blinkTile(x, y)
     end
 end
 
+function discoverAround(x, y)
+    for i = x-1, x+1 do
+        for j = y-1, y+1 do
+            local t = getTile(i, j)
+            if t and t.hp <= 0 and not t.discovered then
+                t.discovered = true
+                discoverAround(t.pos.x, t.pos.y)
+            end
+        end
+    end
+end
+
 function damageTile(x, y, amt)
     local t = getTile(x, y)
 
@@ -162,6 +174,7 @@ function damageTile(x, y, amt)
         t:damage(amt)
         if t.hp <= 0 then
             updateAround(x, y)
+            discoverAround(x, y)
             if t.ore then
                 table.insert(objects.items, item:new(x, y, {ore = t.ore}))
             elseif t.gem then
