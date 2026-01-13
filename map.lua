@@ -169,21 +169,20 @@ function discoverAround(x, y)
                 end
             end
         end
-
-        return true
     end
-    return false
 end
 
 function discoverNext()
-    if #discoverQueue > 0 then
-        local stop = false
-        repeat
-            stop = discoverAround(discoverQueue[1][1], discoverQueue[1][2])
+    local len = #discoverQueue
+    if len > 0 then
+        for i = 1, len do
+            discoverAround(discoverQueue[1][1], discoverQueue[1][2])
             table.remove(discoverQueue, 1)
-        until stop or #discoverQueue == 0
+        end
+
         return true
     end
+    
     return false
 end
 

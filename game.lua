@@ -24,9 +24,9 @@ function game_load()
     objects.interactables = {stockpile:new()}
 
     generateMap()
+    
     discoverAround(objects.player.pos.x, objects.player.pos.y)
-
-    while discoverNext() do end
+    timeToDiscover = DISCOVER_FRAMES
 end
 
 function game_update()
@@ -54,7 +54,11 @@ function game_update()
         end
     end
 
-    discoverNext()
+    timeToDiscover = timeToDiscover - 1
+    if timeToDiscover <= 0 then
+        discoverNext()
+        timeToDiscover = DISCOVER_FRAMES
+    end
 
     for k, v in pairs(controls) do
         if v > 0 then
