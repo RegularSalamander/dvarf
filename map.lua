@@ -199,6 +199,8 @@ function damageTile(x, y, amt)
             elseif t.gem then
                 table.insert(objects.items, item:new(x, y, {gem = t.gem}))
             end
+            t.ore = nil
+            t.gem = nil
         end
     end
 end

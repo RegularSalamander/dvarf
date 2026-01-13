@@ -4,6 +4,12 @@ inventory = {
     map = {}
 }
 
+inventoryTotal = {
+    hand = {ore = 0, gem = 0},
+    stockpile = {ore = 0, gem = 0},
+    map = {ore = 0, gem = 0}
+}
+
 function zeroInventory()
     for i, v in pairs(inventory) do
         inventory[i].ore = {}
@@ -16,6 +22,10 @@ function zeroInventory()
             inventory[i].gem[j] = 0
         end
     end
+
+    inventoryTotal.hand = {ore = 0, gem = 0}
+    inventoryTotal.stockpile = {ore = 0, gem = 0}
+    inventoryTotal.map = {ore = 0, gem = 0}
 end
 
 function countInventory()
@@ -26,8 +36,14 @@ function countInventory()
         for y = 1, MAP_HEIGHT do
             local t = getTile(x, y)
             if t then
-                if t.ore then inventory.map.ore[t.ore + 1] = inventory.map.ore[t.ore + 1] + 1 end
-                if t.gem then inventory.map.gem[t.gem + 1] = inventory.map.gem[t.gem + 1] + 1 end
+                if t.ore then
+                    inventory.map.ore[t.ore + 1] = inventory.map.ore[t.ore + 1] + 1
+                    inventoryTotal.map.ore = inventoryTotal.map.ore + 1
+                end
+                if t.gem then
+                    inventory.map.gem[t.gem + 1] = inventory.map.gem[t.gem + 1] + 1
+                    inventoryTotal.map.gem = inventoryTotal.map.gem + 1
+                end
             end
         end
     end
@@ -36,15 +52,17 @@ function countInventory()
     local sp = objects.interactables[1] --will this always work?
     for i = 1, #sp.contents.ore do
         for j = 1, #sp.contents.ore[i] do
-            if inventory.stockpile.ore[sp.contents.ore[i][j] + 1] >= 0 then
+            if sp.contents.ore[i][j] >= 0 then
                 inventory.stockpile.ore[sp.contents.ore[i][j] + 1] = inventory.stockpile.ore[sp.contents.ore[i][j] + 1] + 1
+                inventoryTotal.stockpile.ore = inventoryTotal.stockpile.ore + 1
             end
         end
     end
     for i = 1, #sp.contents.gem do
         for j = 1, #sp.contents.gem[i] do
-            if inventory.stockpile.gem[sp.contents.gem[i][j] + 1] >= 0 then
+            if sp.contents.gem[i][j] >= 0 then
                 inventory.stockpile.gem[sp.contents.gem[i][j] + 1] = inventory.stockpile.gem[sp.contents.gem[i][j] + 1] + 1
+                inventoryTotal.stockpile.gem = inventoryTotal.stockpile.gem + 1
             end
         end
     end
@@ -54,8 +72,10 @@ function countInventory()
     while t do
         if t.ore then
             inventory.hand.ore[t.ore + 1] = inventory.hand.ore[t.ore + 1] + 1
+            inventoryTotal.hand.ore = inventoryTotal.hand.ore + 1
         elseif t.gem then
             inventory.hand.gem[t.gem + 1] = inventory.hand.gem[t.gem + 1] + 1
+            inventoryTotal.hand.gem = inventoryTotal.hand.gem + 1
         end
         t = t.trailing
     end

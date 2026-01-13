@@ -32,6 +32,8 @@ function game_load()
 end
 
 function game_update()
+    countInventory()
+
     objects.player:control()
     objects.player:update()
 
